@@ -1,25 +1,4 @@
-App.css
-Quem pode acessar
 
-Propriedades do sistema
-Tipo
-Folha de estilo
-Tamanho
-1 KB
-Armazenamento usado
-1 KB
-Local
-src
-Proprietário
-RicpeWebCode
-Modificado
-11 de abr. de 2022 por RicpeWebCode
-Aberto
-15:30 por mim
-Criado em
-22 de jun. de 2022
-Sem descrição
-Os leitores podem fazer o download
 .row:first-child {
     margin-bottom: 100px;
 }
@@ -28,6 +7,8 @@ Os leitores podem fazer o download
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 3px;
+    margin-bottom: 1px;
+    margin-top: 12px;
 }
 
 .row:nth-child(2) {
