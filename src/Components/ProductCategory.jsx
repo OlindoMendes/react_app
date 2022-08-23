@@ -1,69 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Products from "../productsCategory.json";
 
 const ProductCategory = () => {
-  const [products, getProducts ] = useState(Products);
-  const productData = products.data.nodes;
+  const [productList, getProducts] = useState(Products, []);
+  const [selectedCategory, setSelectedCategory] = useState();
 
-  function filterResult(category){
-   
-    
-    return   productData.filter((product) => {
-      let data = ''
-      if(product.category.name === category){
-        data =  product.category.name
-        return data
-      } 
-    });
-  
-  };
+  useEffect(() => {
+    getProducts(Products);
+  }, []);
 
+  function getFilteredList() {
+    if (!selectedCategory) {
+      return productList.data.nodes;
+    }
+    return productList.data.nodes.filter(
+      (product) => product.category.name === selectedCategory
+    );
+  }
+
+  var filteredList = useMemo(getFilteredList, [selectedCategory, productList]);
+
+  function categoryChange(event) {
+    setSelectedCategory(event.target.value);
+  }
+
+  const [data, setData] = useState(Products);
 
   return (
     <>
       <div className="container">
         <div className="row">
           <div className="col">
-            <h1 className="title">Filtre por Categoria</h1>
+            <div className="title">
+              Filter by Category
+              <select
+                name="category-list"
+                id="category-list"
+                onChange={categoryChange}
+              >
+                <option value="">Todos</option>
+                <option value="Aerosol">Aerosol</option>
+                <option value="Barra">Barra</option>
+                <option value="Jabón Barra">Sabão em barra</option>
+                <option value="Jabón Líquido ">Sabão em liquido</option>
+                <option value="Talco">Talco</option>
+              </select>
+            </div>
           </div>
         </div>
         <div className="row">
-          <div className="col">
-            <button className="btn" onClick={() => getProducts(Products)}>
-              Todos
-            </button>
-            <button className="btn" onClick={(category) => filterResult("Aerosol")}>
-              Aerosol
-            </button>
-            <button className="btn" onClick={() => filterResult("Jabón Barra")}>
-              Sabão Barra
-            </button>
-            <button
-              className="btn"
-              onClick={() => filterResult("Jabón Líquido")}
-            >
-              Sabão Líquido
-            </button>
-            <button className="btn" onClick={() => filterResult("Talco")}>
-              Talco
-            </button>
-          </div>
+          <div className="col"></div>
           <div className="col">
             <div className="cards">
-              {filterResult('Talco').map((product, key) => {
+              {filteredList.map((values, index) => {
+                const { id, name, shortDescription, images } = values;
                 return (
-                  <div className="card" key={key}>
-                    <div className="card-header">
-                      <img
-                        src={product.images[0].asset}
-                        alt={product.category.name}
-                      />
+                  <>
+                    <div className="card" key={index}>
+                      <div className="card-header">
+                        <img src={images[0].asset.url} alt={name} />
+                      </div>
+                      <div className="card-body">
+                        <h2 className="titleProduct">{name}</h2>
+                        <span className="category">{shortDescription}</span>
+                      </div>
                     </div>
-                    <div className="card-body"></div>
-                    <h2 className="titleProduct">{product.name}</h2>
-                    <p className="category">{product.shortDescription}</p>
-                    <div className="card-footer"></div>
-                  </div>
+                  </>
                 );
               })}
             </div>
